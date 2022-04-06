@@ -1,0 +1,71 @@
+- name: create group
+  group:
+    name: "{{ USER }}"
+    state: present
+
+- name: create user
+  user:
+    name: "{{ USER }}"
+    group: "{{ USER }}"
+
+# https://github.com/nodesource/distributions
+- name: add NodeSource package signing key
+  apt_key:
+    url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+
+- name: add NodeSource repository
+  apt_repository:
+    repo: "{{ item }}"
+    state: present
+    filename: nodesource
+  loop:
+    - deb https://deb.nodesource.com/node_15.x focal main
+    - deb-src https://deb.nodesource.com/node_15.x focal main
+
+# https://nginx.org/en/linux_packages.html
+- name: add nginx package signing key
+  apt_key:
+    url: https://nginx.org/keys/nginx_signing.key
+
+- name: add nginx repository
+  apt_repository:
+    repo: "{{ item }}"
+    state: present
+    filename: nginx
+  loop:
+    - deb https://nginx.org/packages/mainline/ubuntu/ focal nginx
+    - deb-src https://nginx.org/packages/mainline/ubuntu/ focal nginx
+
+- name: install nodejs, git, nginx, ntp, certbot, postgresql
+  apt:
+    name: "{{ packages }}"
+    state: latest
+    update_cache: yes
+    force_apt_get: yes
+  vars:
+    packages:
+      - nodejs
+      - git
+      - nginx
+      - ntp
+      - certbot
+      - postgresql
+
+- name: create postgresql user
+  command: "psql -c \"CREATE ROLE {{ POSTGRES_USER }} WITH LOGIN SUPERUSER PASSWORD '{{ POSTGRES_PASSWORD }}';\""
+  become: yes
+  become_user: postgres
+
+- name: add server block
+  template:
+    src: ./server-block.conf
+    dest: /etc/nginx/conf.d/{{ DOMAIN }}.conf
+  notify:
+    - restart nginx
+
+- name: create service
+  template:
+    src: ./systemd.service
+    dest: /etc/systemd/system/{{ DOMAIN }}.service
+  notify:
+    - restart service

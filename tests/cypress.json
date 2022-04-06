@@ -1,0 +1,10 @@
+{
+  "baseUrl": "https://local.anmala.nu",
+  "downloadsFolder": "tests/downloads",
+  "fixturesFolder": "tests/fixtures",
+  "integrationFolder": "tests/e2e",
+  "pluginsFile": false,
+  "screenshotsFolder": "tests/screenshots",
+  "supportFile": "tests/support/index.ts",
+  "videosFolder": "tests/videos"
+}

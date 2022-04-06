@@ -1,0 +1,11 @@
+---
+- hosts: site
+  remote_user: root
+  roles:
+    - common
+  vars:
+    USER: johanli
+    EMAIL: hi@johan.li
+    POSTGRES_USER: "{{ lookup('env', 'POSTGRES_USER') }}"
+    POSTGRES_PASSWORD: "{{ lookup('env', 'POSTGRES_PASSWORD') }}"
+    ansible_ssh_extra_args: -o StrictHostKeyChecking=no

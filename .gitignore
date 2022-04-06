@@ -1,0 +1,22 @@
+# dependencies
+/node_modules
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# local env files
+.env.local
+.env.dev
+.env.prod
+
+# custom
+/downloads/
+/.idea/
+/data/nginx/cert/
+/data/postgres/
+/data/redis/
+/scripts/backups/

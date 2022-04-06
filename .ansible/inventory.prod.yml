@@ -1,0 +1,5 @@
+site:
+  hosts:
+    '188.166.116.102':
+  vars:
+    DOMAIN: anmala.nu

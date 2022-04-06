@@ -1,0 +1,5 @@
+site:
+  hosts:
+    '46.101.83.57':
+  vars:
+    DOMAIN: anmala.johan.li
